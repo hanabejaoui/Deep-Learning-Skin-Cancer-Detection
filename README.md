@@ -78,23 +78,6 @@ You can download the dataset from:
 
 ---
 
-## 📂 Project Structure
-Web-application/
-
-│
-├── db/ # Database logic
-├── public/ # Frontend files
-│ ├── index.html
-│ ├── login.html
-│ ├── register.html
-│ ├── app.js
-│ └── style.css
-│
-├── server.js # Backend server
-├── package.json
-└── .gitignore
----
-
 ## 🚀 Installation & Setup
 
 ### 1️⃣ Clone the repository
