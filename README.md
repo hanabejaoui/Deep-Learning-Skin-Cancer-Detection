@@ -60,21 +60,14 @@ You can download the dataset from:
 
 ## 🛠️ Technology Stack
 
-### Backend
-- Node.js
-- Express.js
-- SQLite (for authentication database)
-- Multer (for image uploads)
+### Backend:
+Node.js, Express.js, SQLite (for authentication database), Multer (for image uploads)
 
 ### Frontend
-- HTML
-- CSS
-- JavaScript (Vanilla)
+HTML, CSS, JavaScript (Vanilla)
 
 ### Machine Learning
-- Python
-- TensorFlow / Keras
-- Transfer learning
+Python, TensorFlow / Keras, Transfer learning
 
 ---
 
@@ -92,13 +85,6 @@ node server.js
 http://localhost:3000
 
 ---
-
-## ⚠️ Disclaimer
-
-This application does NOT provide medical diagnosis.  
-It is intended strictly for research and educational purposes.
-
-Always consult a qualified healthcare professional for medical advice.
 
 ---
 
