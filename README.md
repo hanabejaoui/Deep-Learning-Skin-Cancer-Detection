@@ -32,6 +32,18 @@ The application is intended strictly for **research and educational purposes**.
 The best-performing model was integrated into this web application for inference.
 
 ⚠️ Due to size constraints, the dataset is not included in this repository.
+## 📥 Dataset Download & Setup
+
+This project uses the **HAM10000** dataset.
+
+The dataset is publicly available and must be downloaded separately due to size limitations.
+
+### 🔗 Download Links
+
+You can download the dataset from:
+
+- Kaggle: https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000
+- ISIC Archive: https://www.isic-archive.com/
 
 ---
 
