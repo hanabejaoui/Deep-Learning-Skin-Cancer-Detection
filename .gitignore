@@ -1,0 +1,21 @@
+# Node
+node_modules/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Uploads
+uploads/
+
+# Models
+models/*.h5
+models/*.pt
+models/*.pth
+
+# Database
+*.db

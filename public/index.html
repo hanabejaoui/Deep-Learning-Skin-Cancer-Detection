@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Skin Lesion App</title>
+
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+  <script>
+  fetch("/check-auth").then((res) => {
+    if (!res.ok) {
+      window.location.href = "login.html";
+    }
+  });
+</script>
+
+
+
+  <div class="container">
+    
+
+    <h1>Skin Lesion App</h1>
+    <p class="description">
+    This application is part of an academic research project focused on exploring
+    machine learning techniques for skin lesion analysis. It demonstrates a
+    complete web-based pipeline, from image upload to prediction output, designed
+    for educational and research purposes.
+    </p>
+
+    <input type="file" id="imageInput" accept="image/*" />
+
+    <img id="preview" />
+    <div class="consent-box">
+  <label class="consent-label">
+    <input type="checkbox" id="consentCheckbox" />
+    <span>
+      I understand that this application does <strong>not</strong> provide a
+      medical diagnosis and is intended for research and educational purposes
+      only.
+    </span>
+  </label>
+</div>
+
+
+
+    <button id="predictBtn" disabled>Predict</button>
+
+    <div id="result"></div>
+
+    <p class="disclaimer">
+      ⚠️ <strong>Disclaimer:</strong> This application is for educational and
+      research purposes only. It does NOT provide medical advice.
+    </p>
+    <button id="logoutBtn" type="button" class="logout">
+     Logout
+</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

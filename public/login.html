@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+
+      <input id="email" type="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+
+      <!-- IMPORTANT: type="button" -->
+      <button id="loginBtn" type="button">Login</button>
+
+      <p class="small-text">
+        Don’t have an account? <a href="register.html">Register</a>
+      </p>
+    </div>
+
+    
+    <script>
+      // ✅ DEFINE ELEMENTS FIRST
+      const btn = document.getElementById("loginBtn");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+
+      btn.addEventListener("click", async () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        console.log("Login clicked", email); // DEBUG LINE
+
+        const response = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",   // ✅ VERY IMPORTANT
+        body: JSON.stringify({ email, password }),
+        });
+
+
+        const data = await response.json();
+
+        if (response.ok) {
+          window.location.href = "index.html";
+        } else {
+          alert(data.error);
+        }
+      });
+    </script>
+  </body>
+</html>
