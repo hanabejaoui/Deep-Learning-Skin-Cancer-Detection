@@ -80,6 +80,7 @@ You can download the dataset from:
 
 ## 📂 Project Structure
 Web-application/
+
 │
 ├── db/ # Database logic
 ├── public/ # Frontend files
