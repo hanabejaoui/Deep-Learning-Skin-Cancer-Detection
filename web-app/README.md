@@ -39,32 +39,9 @@ New users create an account by providing email and password (with confirmation).
 Authenticated users can upload an image, accept the disclaimer, and request a prediction.
 
 **Figure 3. Prediction interface**
-![Prediction Page](images/prediction.png)
-
----
-
-## Project Structure
+![Prediction Page](images/predict.png)
 
 
-web-app/
-├── db/ # SQLite database logic / connection
-├── public/ # Static frontend files
-│ ├── index.html
-│ ├── login.html
-│ ├── register.html
-│ ├── style.css
-│ └── app.js
-├── images/ # README screenshots (login/register/prediction)
-│ ├── login.png
-│ ├── register.png
-│ └── prediction.png
-├── server.js # Express backend server
-├── package.json
-├── package-lock.json
-└── .gitignore
-
-
----
 
 ## System Flow (High-level)
 
