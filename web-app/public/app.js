@@ -1,14 +1,14 @@
-// 1️⃣ Get elements
+// Get elements
 const input = document.getElementById("imageInput");
 const preview = document.getElementById("preview");
 const predictBtn = document.getElementById("predictBtn");
 const resultDiv = document.getElementById("result");
 const consentCheckbox = document.getElementById("consentCheckbox");
 
-// 2️⃣ State
+
 let selectedFile = null;
 
-// 3️⃣ Image selection
+// Image selection
 input.addEventListener("change", () => {
   selectedFile = input.files[0];
 
@@ -27,7 +27,7 @@ input.addEventListener("change", () => {
   resultDiv.textContent = "";
 });
 
-// 4️⃣ Consent checkbox change
+
 consentCheckbox.addEventListener("change", () => {
   if (selectedFile && consentCheckbox.checked) {
     predictBtn.disabled = false;
@@ -36,7 +36,7 @@ consentCheckbox.addEventListener("change", () => {
   }
 });
 
-// 5️⃣ Predict button
+// Predict button
 predictBtn.addEventListener("click", async () => {
   if (!selectedFile) return;
 
@@ -59,9 +59,9 @@ predictBtn.addEventListener("click", async () => {
   const data = await response.json();
 
   resultDiv.innerHTML = `
-    <strong>Prediction:</strong> ${data.prediction}<br />
-    <strong>Confidence:</strong> ${data.confidence}
-  `;
+  <strong>Prediction:</strong> ${data.prediction}<br>
+  <strong>Confidence:</strong> ${(data.probability * 100).toFixed(2)}%
+` ;
 });
 const logoutBtn = document.getElementById("logoutBtn");
 
@@ -70,7 +70,7 @@ if (logoutBtn) {
     try {
       const response = await fetch("/logout", {
         method: "POST",
-        credentials: "same-origin", // 🔴 REQUIRED
+        credentials: "same-origin", 
       });
 
       if (response.ok) {

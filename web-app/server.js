@@ -3,19 +3,16 @@ const path = require("path");
 const multer = require("multer");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
+const { spawn } = require("child_process");
+const fs = require("fs");
 
-const db = require("./db/database"); // SQLite connection
+const db = require("./db/database");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-secret: process.env.SESSION_SECRET || "dev-secret"
-
-
-
 
 
 app.use(express.json());
-
 
 app.use(
   session({
@@ -25,10 +22,9 @@ app.use(
   })
 );
 
-
 app.use(express.static(path.join(__dirname, "public")));
 
-
+/* -------------------- AUTH CHECK -------------------- */
 
 function requireLogin(req, res, next) {
   if (!req.session.userId) {
@@ -37,25 +33,22 @@ function requireLogin(req, res, next) {
   next();
 }
 
+/* -------------------- MULTER -------------------- */
 
 const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+      const uniqueName = Date.now() + "-" + file.originalname;
+      cb(null, uniqueName);
+    },
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-
-function dummyPredict() {
-  const isMalignant = Math.random() > 0.5;
-  const confidence = Math.random();
-
-  return {
-    prediction: isMalignant ? "Malignant" : "Benign",
-    confidence: (confidence * 100).toFixed(2) + "%",
-  };
-}
-
-
-
+/* -------------------- REGISTER -------------------- */
 
 app.post("/register", async (req, res) => {
   const { email, password } = req.body;
@@ -82,7 +75,8 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// LOGIN
+/* -------------------- LOGIN -------------------- */
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -90,37 +84,34 @@ app.post("/login", async (req, res) => {
     return res.status(400).json({ error: "Missing credentials" });
   }
 
-  db.get(
-    "SELECT * FROM users WHERE email = ?",
-    [email],
-    async (err, user) => {
-      if (err || !user) {
-        return res.status(401).json({ error: "Invalid email or password" });
-      }
-
-      const match = await bcrypt.compare(password, user.password);
-
-      if (!match) {
-        return res.status(401).json({ error: "Invalid email or password" });
-      }
-
-      // Save user in session
-      req.session.userId = user.id;
-      req.session.email = user.email;
-
-      res.json({ message: "Login successful" });
+  db.get("SELECT * FROM users WHERE email = ?", [email], async (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({ error: "Invalid email or password" });
     }
-  );
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    req.session.userId = user.id;
+    req.session.email = user.email;
+
+    res.json({ message: "Login successful" });
+  });
 });
 
-// LOGOUT
+/* -------------------- LOGOUT -------------------- */
+
 app.post("/logout", (req, res) => {
   req.session.destroy(() => {
     res.json({ message: "Logged out" });
   });
 });
 
-// CHECK AUTH
+/* -------------------- CHECK AUTH -------------------- */
+
 app.get("/check-auth", (req, res) => {
   if (req.session.userId) {
     res.sendStatus(200);
@@ -131,31 +122,47 @@ app.get("/check-auth", (req, res) => {
 
 /* -------------------- PREDICTION ROUTE -------------------- */
 
-//  PROTECTED prediction route
-app.post(
-  "/predict",
-  requireLogin,
-  upload.single("image"),
-  (req, res) => {
-    if (!req.file) {
-      return res.status(400).json({ error: "No image uploaded" });
+app.post("/predict", requireLogin, upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No image uploaded" });
+  }
+
+  const imagePath = req.file.path;
+
+  const pythonExe = path.join(__dirname, "venv", "Scripts", "python.exe");
+
+  const pythonProcess = spawn(pythonExe, [
+    path.join(__dirname, "ML", "predict.py"),
+    imagePath,
+  ]);
+
+  let resultData = "";
+
+  pythonProcess.stdout.on("data", (data) => {
+    resultData += data.toString();
+  });
+
+  pythonProcess.stderr.on("data", (data) => {
+    console.error("Python Error:", data.toString());
+  });
+
+  pythonProcess.on("close", (code) => {
+    try {
+      const result = JSON.parse(resultData.trim());
+      res.json(result);
+    } catch (error) {
+      console.error("JSON parse error:", error);
+      console.error("Raw output:", resultData);
+      res.status(500).json({ error: "Prediction parsing failed" });
     }
 
-    const result = dummyPredict();
+    fs.unlink(imagePath, (err) => {
+      if (err) console.error("Failed to delete image:", err);
+    });
+  });
+});
 
-    console.log(
-      "User:",
-      req.session.userId,
-      "Prediction:",
-      result.prediction,
-      result.confidence
-    );
-
-    res.json(result);
-  }
-);
-
-
+/* -------------------- START SERVER -------------------- */
 
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
