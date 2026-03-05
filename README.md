@@ -5,7 +5,7 @@
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.19-orange)
 ![Node.js](https://img.shields.io/badge/Node.js-Backend-green)
 ![GPU](https://img.shields.io/badge/Trained%20on-Tesla%20T4-brightgreen)
-![License](https://img.shields.io/badge/License-Academic-lightgrey)
+
 
 ---
 
