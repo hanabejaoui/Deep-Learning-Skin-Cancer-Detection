@@ -6,7 +6,6 @@
 ![Node.js](https://img.shields.io/badge/Node.js-Backend-green)
 ![GPU](https://img.shields.io/badge/Trained%20on-Tesla%20T4-brightgreen)
 
-
 ---
 
 ## 📌 Project Overview
@@ -199,7 +198,7 @@ The trained model is stored using **Git LFS**.
 git clone https://github.com/hanabejaoui/Deep-Learning-Skin-Cancer-Detection.git
 
 cd Deep-Learning-Skin-Cancer-Detection/web-app
-
+pip install -r requirements.txt
 
 
 ### 2️⃣ Install Node.js Dependencies
